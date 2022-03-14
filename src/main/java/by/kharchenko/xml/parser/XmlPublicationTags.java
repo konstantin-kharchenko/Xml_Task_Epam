@@ -24,12 +24,12 @@ public enum XmlPublicationTags {
     }
 
     XmlPublicationTags(String name) {
-        this.name=name;
+        this.name = name;
     }
 
-    public static XmlPublicationTags getXmlPublicationWord(String name){
-        for (XmlPublicationTags word: XmlPublicationTags.values()) {
-            if(Objects.equals(word.name, name)) return word;
+    public static XmlPublicationTags getXmlPublicationWord(String name) {
+        for (XmlPublicationTags word : XmlPublicationTags.values()) {
+            if (Objects.equals(word.name, name)) return word;
         }
         return null;
     }

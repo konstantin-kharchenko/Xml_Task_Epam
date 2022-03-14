@@ -8,8 +8,10 @@ import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
 
 public class PublicationDirector {
-    public static Papers createPublication (AbstractBaseBuilder builder, String path) throws IOException, SAXException, XMLStreamException {
-       builder.buildCatalog(path);
-       return builder.getCatalog();
+
+
+    public static Papers createPublication(AbstractBaseBuilder builder, String path) throws IOException, SAXException, XMLStreamException {
+        builder.buildCatalog(path);
+        return builder.getCatalog();
     }
 }

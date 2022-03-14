@@ -11,7 +11,7 @@ import java.io.IOException;
 public class StAXTest {
     @Test
     public void testBuilder() throws SAXException, IOException, XMLStreamException {
-        var a = PublicationDirector.createPublication(new StAXBuilder(), "src/main/resources/files/papers.xml") ;
+        var a = PublicationDirector.createPublication(new StAXBuilder(), "src/main/resources/files/papers.xml");
         System.out.println(a);
     }
 }

@@ -3,7 +3,7 @@ package by.kharchenko.xml.entity;
 import java.util.Objects;
 
 
-public class Magazine extends AbstractPublication{
+public class Magazine extends AbstractPublication {
 
     private int subscription_index;
 

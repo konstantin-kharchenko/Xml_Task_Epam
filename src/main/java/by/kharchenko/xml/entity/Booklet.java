@@ -1,7 +1,7 @@
 package by.kharchenko.xml.entity;
 
 
-public class Booklet extends AbstractPublication{
+public class Booklet extends AbstractPublication {
 
     public Booklet() {
     }

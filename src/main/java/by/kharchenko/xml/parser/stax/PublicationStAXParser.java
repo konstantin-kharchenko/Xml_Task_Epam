@@ -2,6 +2,10 @@ package by.kharchenko.xml.parser.stax;
 
 import by.kharchenko.xml.entity.*;
 import by.kharchenko.xml.parser.XmlPublicationTags;
+import by.kharchenko.xml.parser.sax.PublicationSAXParser;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -16,6 +20,7 @@ import java.util.Objects;
 
 public class PublicationStAXParser {
 
+    private static final Logger LOGGER = LogManager.getLogger(PublicationSAXParser.class);
     private Papers catalog;
     private XMLInputFactory inputFactory;
 
@@ -54,16 +59,16 @@ public class PublicationStAXParser {
                 }
             }
         } catch (XMLStreamException ex) {
-            System.err.println("StAX parsing error! " + ex.getMessage());
+            LOGGER.log(Level.ERROR, "StAX parsing error! " + ex.getMessage());
         } catch (FileNotFoundException ex) {
-            System.err.println("File " + fileName + " not found! " + ex);
+            LOGGER.log(Level.ERROR, "File " + fileName + " not found! " + ex);
         } finally {
             try {
                 if (inputStream != null) {
                     inputStream.close();
                 }
             } catch (IOException e) {
-                System.err.println("Impossible close file " + fileName + " : " + e);
+                LOGGER.log(Level.ERROR, "Impossible close file " + fileName + " : " + e);
             }
         }
     }
@@ -78,25 +83,9 @@ public class PublicationStAXParser {
             switch (type) {
                 case XMLStreamConstants.START_ELEMENT:
                     name = reader.getLocalName();
-                    switch (Objects.requireNonNull(XmlPublicationTags.getXmlPublicationWord(name))) {
-                        case TITLE:
-                            magazine.setTitle(getXMLText(reader));
-                            break;
-                        case PAGES:
-                            magazine.setPages(Integer.parseInt(getXMLText(reader)));
-                            break;
-                        case SUBSCRIPTION_INDEX:
-                            magazine.setSubscription_index(Integer.parseInt(getXMLText(reader)));
-                            break;
-                        case DATE:
-                            magazine.setDate(LocalDateTime.parse(getXMLText(reader)));
-                            break;
-                        case COLOR:
-                            magazine.setColor(Boolean.parseBoolean(getXMLText(reader)));
-                            break;
-                        case MONTHLY:
-                            magazine.setMonthly(Boolean.parseBoolean(getXMLText(reader)));
-                            break;
+                    publicationInit(magazine, reader, name);
+                    if (Objects.equals(name, XmlPublicationTags.SUBSCRIPTION_INDEX.getName())) {
+                        magazine.setSubscription_index(Integer.parseInt(getXMLText(reader)));
                     }
                     break;
                 case XMLStreamConstants.END_ELEMENT:
@@ -120,23 +109,7 @@ public class PublicationStAXParser {
             switch (type) {
                 case XMLStreamConstants.START_ELEMENT:
                     name = reader.getLocalName();
-                    switch (Objects.requireNonNull(XmlPublicationTags.getXmlPublicationWord(name))) {
-                        case TITLE:
-                            booklet.setTitle(getXMLText(reader));
-                            break;
-                        case PAGES:
-                            booklet.setPages(Integer.parseInt(getXMLText(reader)));
-                            break;
-                        case DATE:
-                            booklet.setDate(LocalDateTime.parse(getXMLText(reader)));
-                            break;
-                        case COLOR:
-                            booklet.setColor(Boolean.parseBoolean(getXMLText(reader)));
-                            break;
-                        case MONTHLY:
-                            booklet.setMonthly(Boolean.parseBoolean(getXMLText(reader)));
-                            break;
-                    }
+                    publicationInit(booklet, reader, name);
                     break;
                 case XMLStreamConstants.END_ELEMENT:
                     name = reader.getLocalName();
@@ -158,25 +131,9 @@ public class PublicationStAXParser {
             switch (type) {
                 case XMLStreamConstants.START_ELEMENT:
                     name = reader.getLocalName();
-                    switch (Objects.requireNonNull(XmlPublicationTags.getXmlPublicationWord(name))) {
-                        case TITLE:
-                            newspaper.setTitle(getXMLText(reader));
-                            break;
-                        case PAGES:
-                            newspaper.setPages(Integer.parseInt(getXMLText(reader)));
-                            break;
-                        case SUBSCRIPTION_INDEX:
-                            newspaper.setSubscription_index(Integer.parseInt(getXMLText(reader)));
-                            break;
-                        case DATE:
-                            newspaper.setDate(LocalDateTime.parse(getXMLText(reader)));
-                            break;
-                        case COLOR:
-                            newspaper.setColor(Boolean.parseBoolean(getXMLText(reader)));
-                            break;
-                        case MONTHLY:
-                            newspaper.setMonthly(Boolean.parseBoolean(getXMLText(reader)));
-                            break;
+                    publicationInit(newspaper, reader, name);
+                    if (Objects.equals(name, XmlPublicationTags.SUBSCRIPTION_INDEX.getName())) {
+                        newspaper.setSubscription_index(Integer.parseInt(getXMLText(reader)));
                     }
                     break;
                 case XMLStreamConstants.END_ELEMENT:
@@ -188,6 +145,26 @@ public class PublicationStAXParser {
             }
         }
         return null;
+    }
+
+    private void publicationInit(AbstractPublication publication, XMLStreamReader reader, String name) throws XMLStreamException {
+        switch (Objects.requireNonNull(XmlPublicationTags.getXmlPublicationWord(name))) {
+            case TITLE:
+                publication.setTitle(getXMLText(reader));
+                break;
+            case PAGES:
+                publication.setPages(Integer.parseInt(getXMLText(reader)));
+                break;
+            case DATE:
+                publication.setDate(LocalDateTime.parse(getXMLText(reader)));
+                break;
+            case COLOR:
+                publication.setColor(Boolean.parseBoolean(getXMLText(reader)));
+                break;
+            case MONTHLY:
+                publication.setMonthly(Boolean.parseBoolean(getXMLText(reader)));
+                break;
+        }
     }
 
     private String getXMLText(XMLStreamReader reader) throws XMLStreamException {

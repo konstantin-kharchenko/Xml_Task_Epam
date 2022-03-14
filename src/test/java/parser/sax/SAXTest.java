@@ -15,7 +15,7 @@ public class SAXTest {
 
     @Test
     public void testBuilder() throws ParserConfigurationException, SAXException, IOException, XMLStreamException {
-        var a = PublicationDirector.createPublication(new SAXBuilder(), "src/main/resources/files/papers.xml") ;
+        var a = PublicationDirector.createPublication(new SAXBuilder(), "src/main/resources/files/papers.xml");
         System.out.println(a);
     }
 }

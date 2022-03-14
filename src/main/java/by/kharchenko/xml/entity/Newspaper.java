@@ -1,7 +1,8 @@
 package by.kharchenko.xml.entity;
 
 import java.util.Objects;
-public class Newspaper extends AbstractPublication{
+
+public class Newspaper extends AbstractPublication {
     private int subscription_index;
 
     public int getSubscription_index() {

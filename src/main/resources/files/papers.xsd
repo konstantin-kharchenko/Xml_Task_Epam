@@ -29,7 +29,7 @@
         <xs:attribute name="id" type="paperID" use="required"/>
         <xs:attribute name="glossy" use="required">
             <xs:simpleType>
-                <xs:restriction base="xs:string" >
+                <xs:restriction base="xs:string">
                     <xs:enumeration value="глянец на журнале"/>
                     <xs:enumeration value="глянец на буклете"/>
                     <xs:enumeration value="нет глянца(это газета)"/>
@@ -66,7 +66,7 @@
     </xs:complexType>
 
     <xs:simpleType name="paperID">
-        <xs:restriction base="xs:ID" >
+        <xs:restriction base="xs:ID">
             <xs:pattern value="P\d{1,4}"/>
         </xs:restriction>
     </xs:simpleType>

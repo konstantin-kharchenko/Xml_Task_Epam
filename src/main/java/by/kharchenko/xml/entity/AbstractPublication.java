@@ -19,6 +19,7 @@ public abstract class AbstractPublication {
     public void setGlossy(String glossy) {
         this.glossy = glossy;
     }
+
     protected LocalDateTime date;
 
     public String getTitle() {

@@ -9,7 +9,7 @@ import org.xml.sax.SAXParseException;
 
 public class PublicationErrorHandler implements ErrorHandler {
 
-    private static Logger LOGGER = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger(PublicationErrorHandler.class);
 
     @Override
     public void warning(SAXParseException exception) throws SAXException {
