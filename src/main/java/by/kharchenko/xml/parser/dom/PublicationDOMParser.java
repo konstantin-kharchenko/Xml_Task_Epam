@@ -69,35 +69,31 @@ public class PublicationDOMParser {
     }
 
     private AbstractPublication buildMagazine(Element publication) {
-        Magazine magazine =  new Magazine();
-        publicationInit(magazine, publication);
-        magazine.setGlossy(publication.getAttribute(XmlPublicationTags.GLOSSY.getName()));
-        magazine.setSubscription_index(Integer.parseInt(getElementTextContent(publication, XmlPublicationTags.SUBSCRIPTION_INDEX.getName())));
-        return magazine;
+        return new Magazine.MagazineBuilder((Magazine)addPublicationElements(new Magazine(), publication))
+                .withSubscriptionIndex(Integer.parseInt(getElementTextContent(publication, XmlPublicationTags.SUBSCRIPTION_INDEX.getName())))
+                .build();
     }
 
     private AbstractPublication buildBooklet(Element publication) {
-        Booklet booklet =  new Booklet();
-        publicationInit(booklet, publication);
-        booklet.setGlossy(publication.getAttribute(XmlPublicationTags.GLOSSY.getName()));
-
-        return booklet;
+        return addPublicationElements(new Booklet(), publication);
     }
 
     private AbstractPublication buildNewspaper(Element publication) {
-        Newspaper newspaper =  new Newspaper();
-        publicationInit(newspaper, publication);
-        newspaper.setSubscription_index(Integer.parseInt(getElementTextContent(publication, XmlPublicationTags.SUBSCRIPTION_INDEX.getName())));
-        return newspaper;
+        return new Newspaper.NewspaperBuilder((Newspaper)addPublicationElements(new Newspaper(), publication))
+                .withSubscriptionIndex(Integer.parseInt(getElementTextContent(publication, XmlPublicationTags.SUBSCRIPTION_INDEX.getName())))
+                .build();
     }
 
-    private void publicationInit(AbstractPublication publication, Element element){
+    private AbstractPublication addPublicationElements(AbstractPublication publication, Element element) {
         publication.setId(element.getAttribute(XmlPublicationTags.ID.getName()));
         publication.setPages(Integer.parseInt(getElementTextContent(element, XmlPublicationTags.PAGES.getName())));
         publication.setDate(LocalDateTime.parse(getElementTextContent(element, XmlPublicationTags.DATE.getName())));
         publication.setMonthly(Boolean.parseBoolean(getElementTextContent(element, XmlPublicationTags.MONTHLY.getName())));
         publication.setTitle(getElementTextContent(element, XmlPublicationTags.TITLE.getName()));
+        publication.setGlossy(element.getAttribute(XmlPublicationTags.GLOSSY.getName()));
+        return publication;
     }
+
     private static String getElementTextContent(Element element, String elementName) {
         NodeList nList = element.getElementsByTagName(elementName);
         Node node = nList.item(0);

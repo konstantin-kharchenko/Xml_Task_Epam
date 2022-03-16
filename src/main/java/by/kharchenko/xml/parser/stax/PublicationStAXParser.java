@@ -33,9 +33,9 @@ public class PublicationStAXParser {
         return catalog;
     }
 
-    public void buildCatalog(String fileName) throws XMLStreamException, FileNotFoundException {
+    public void buildCatalog(String fileName) {
         FileInputStream inputStream = null;
-        XMLStreamReader reader = null;
+        XMLStreamReader reader;
         String name;
         try {
             inputStream = new FileInputStream(new File(fileName));

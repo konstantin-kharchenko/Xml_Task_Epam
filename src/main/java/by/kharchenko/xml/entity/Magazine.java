@@ -1,5 +1,6 @@
 package by.kharchenko.xml.entity;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 
@@ -38,11 +39,67 @@ public class Magazine extends AbstractPublication {
                 ", monthly=" + monthly +
                 ", color=" + color +
                 ", pages=" + pages +
-                ", PublicationId='" + PublicationId + '\'' +
+                ", PublicationId='" + publicationId + '\'' +
                 ", date=" + date +
                 ", subscription_index=" + subscription_index +
                 ", glossy='" + glossy + '\'' +
                 '}';
+    }
+
+    public static class MagazineBuilder{
+        private Magazine magazine;
+
+        public MagazineBuilder() {
+            magazine = new Magazine();
+        }
+
+        public MagazineBuilder(Magazine magazine) {
+            this.magazine = magazine;
+        }
+
+        public MagazineBuilder withSubscriptionIndex(int index){
+            magazine.subscription_index= index;
+            return this;
+        }
+
+        public MagazineBuilder withColor(boolean color){
+            magazine.color= color;
+            return this;
+        }
+
+        public MagazineBuilder withMonthly(boolean monthly){
+            magazine.monthly= monthly;
+            return this;
+        }
+
+        public MagazineBuilder withPages(int pages){
+            magazine.pages= pages;
+            return this;
+        }
+
+        public MagazineBuilder withID(String id){
+            magazine.publicationId= id;
+            return this;
+        }
+
+        public MagazineBuilder withDate(LocalDateTime date){
+            magazine.date= date;
+            return this;
+        }
+
+        public MagazineBuilder withGlossy(String glossy){
+            magazine.glossy= glossy;
+            return this;
+        }
+
+        public MagazineBuilder withTitle(String title){
+            magazine.title= title;
+            return this;
+        }
+
+        public Magazine build(){
+            return magazine;
+        }
     }
 
 }

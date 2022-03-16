@@ -1,5 +1,6 @@
 package by.kharchenko.xml.entity;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Newspaper extends AbstractPublication {
@@ -23,7 +24,7 @@ public class Newspaper extends AbstractPublication {
                 ", monthly=" + monthly +
                 ", color=" + color +
                 ", pages=" + pages +
-                ", PublicationId='" + PublicationId + '\'' +
+                ", PublicationId='" + publicationId + '\'' +
                 ", date=" + date +
                 ", subscription_index=" + subscription_index +
                 '}';
@@ -40,5 +41,61 @@ public class Newspaper extends AbstractPublication {
     @Override
     public int hashCode() {
         return Objects.hash(subscription_index);
+    }
+
+    public static class NewspaperBuilder{
+        private Newspaper newspaper;
+
+        public NewspaperBuilder() {
+            newspaper = new Newspaper();
+        }
+
+        public NewspaperBuilder(Newspaper newspaper) {
+            this.newspaper = newspaper;
+        }
+
+        public NewspaperBuilder withColor(boolean color){
+            newspaper.color= color;
+            return this;
+        }
+
+        public NewspaperBuilder withMonthly(boolean monthly){
+            newspaper.monthly= monthly;
+            return this;
+        }
+
+        public NewspaperBuilder withPages(int pages){
+            newspaper.pages= pages;
+            return this;
+        }
+
+        public NewspaperBuilder withID(String id){
+            newspaper.publicationId= id;
+            return this;
+        }
+
+        public NewspaperBuilder withDate(LocalDateTime date){
+            newspaper.date= date;
+            return this;
+        }
+
+        public NewspaperBuilder withGlossy(String glossy){
+            newspaper.glossy= glossy;
+            return this;
+        }
+
+        public NewspaperBuilder withTitle(String title){
+            newspaper.title= title;
+            return this;
+        }
+
+        public NewspaperBuilder withSubscriptionIndex(int index){
+            newspaper.subscription_index= index;
+            return this;
+        }
+
+        public Newspaper build(){
+            return newspaper;
+        }
     }
 }

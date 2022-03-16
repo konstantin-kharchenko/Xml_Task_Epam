@@ -2,10 +2,11 @@ package by.kharchenko.xml.entity;
 
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public abstract class AbstractPublication {
 
-    protected String PublicationId;
+    protected String publicationId;
     protected String title;
     protected boolean monthly;
     protected boolean color;
@@ -55,11 +56,11 @@ public abstract class AbstractPublication {
     }
 
     public String getId() {
-        return PublicationId;
+        return publicationId;
     }
 
     public void setId(String id) {
-        PublicationId = id;
+        publicationId = id;
     }
 
     public LocalDateTime getDate() {
@@ -76,7 +77,7 @@ public abstract class AbstractPublication {
     @Override
     public String toString() {
         return "Publication{" +
-                "id='" + PublicationId + '\'' +
+                "id='" + publicationId + '\'' +
                 "title='" + title + '\'' +
                 ", monthly=" + monthly +
                 ", color=" + color +
@@ -85,4 +86,16 @@ public abstract class AbstractPublication {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AbstractPublication that = (AbstractPublication) o;
+        return monthly == that.monthly && color == that.color && pages == that.pages && publicationId.equals(that.publicationId) && title.equals(that.title) && glossy.equals(that.glossy) && date.equals(that.date);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(publicationId, title, monthly, color, pages, glossy, date);
+    }
 }
