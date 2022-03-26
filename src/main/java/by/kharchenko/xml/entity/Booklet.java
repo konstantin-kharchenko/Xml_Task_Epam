@@ -19,7 +19,7 @@ public class Booklet extends AbstractPublication {
                 '}';
     }
 
-    public static class BookletBuilder extends AbstractPublicationBuilder<Booklet>{
+    public static class BookletBuilder extends AbstractPublicationBuilder<Booklet> {
 
         public BookletBuilder() {
             this.publication = new Booklet();

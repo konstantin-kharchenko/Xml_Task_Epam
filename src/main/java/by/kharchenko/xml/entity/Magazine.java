@@ -46,7 +46,7 @@ public class Magazine extends AbstractPublication {
                 '}';
     }
 
-    public static class MagazineBuilder extends AbstractPublicationBuilder<Magazine>{
+    public static class MagazineBuilder extends AbstractPublicationBuilder<Magazine> {
         public MagazineBuilder() {
             this.publication = new Magazine();
         }
@@ -55,11 +55,10 @@ public class Magazine extends AbstractPublication {
             super(publication);
         }
 
-        public MagazineBuilder withSubscriptionIndex(int index){
-            this.publication.subscription_index= index;
+        public MagazineBuilder withSubscriptionIndex(int index) {
+            this.publication.subscription_index = index;
             return this;
         }
-
 
 
     }

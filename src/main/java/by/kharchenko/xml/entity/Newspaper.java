@@ -42,7 +42,7 @@ public class Newspaper extends AbstractPublication {
         return Objects.hash(subscription_index);
     }
 
-    public static class NewspaperBuilder extends AbstractPublicationBuilder<Newspaper>{
+    public static class NewspaperBuilder extends AbstractPublicationBuilder<Newspaper> {
         public NewspaperBuilder() {
             this.publication = new Newspaper();
         }
@@ -51,8 +51,8 @@ public class Newspaper extends AbstractPublication {
             super(publication);
         }
 
-        public NewspaperBuilder withSubscriptionIndex(int index){
-            publication.subscription_index= index;
+        public NewspaperBuilder withSubscriptionIndex(int index) {
+            publication.subscription_index = index;
             return this;
         }
 
