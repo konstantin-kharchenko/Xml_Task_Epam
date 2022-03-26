@@ -46,60 +46,22 @@ public class Magazine extends AbstractPublication {
                 '}';
     }
 
-    public static class MagazineBuilder{
-        private Magazine magazine;
-
+    public static class MagazineBuilder extends AbstractPublicationBuilder<Magazine>{
         public MagazineBuilder() {
-            magazine = new Magazine();
+            this.publication = new Magazine();
         }
 
-        public MagazineBuilder(Magazine magazine) {
-            this.magazine = magazine;
+        public MagazineBuilder(Magazine publication) {
+            super(publication);
         }
 
         public MagazineBuilder withSubscriptionIndex(int index){
-            magazine.subscription_index= index;
+            this.publication.subscription_index= index;
             return this;
         }
 
-        public MagazineBuilder withColor(boolean color){
-            magazine.color= color;
-            return this;
-        }
 
-        public MagazineBuilder withMonthly(boolean monthly){
-            magazine.monthly= monthly;
-            return this;
-        }
 
-        public MagazineBuilder withPages(int pages){
-            magazine.pages= pages;
-            return this;
-        }
-
-        public MagazineBuilder withID(String id){
-            magazine.publicationId= id;
-            return this;
-        }
-
-        public MagazineBuilder withDate(LocalDateTime date){
-            magazine.date= date;
-            return this;
-        }
-
-        public MagazineBuilder withGlossy(String glossy){
-            magazine.glossy= glossy;
-            return this;
-        }
-
-        public MagazineBuilder withTitle(String title){
-            magazine.title= title;
-            return this;
-        }
-
-        public Magazine build(){
-            return magazine;
-        }
     }
 
 }

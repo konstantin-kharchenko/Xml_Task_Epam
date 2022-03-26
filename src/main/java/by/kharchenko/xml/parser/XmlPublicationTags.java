@@ -17,7 +17,7 @@ public enum XmlPublicationTags {
     GLOSSY("glossy"),
     SUBSCRIPTION_INDEX("subscription-index");
 
-    private String name;
+    private final String name;
 
     public String getName() {
         return name;

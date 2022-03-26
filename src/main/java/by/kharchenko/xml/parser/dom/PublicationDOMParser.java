@@ -15,17 +15,19 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import java.awt.print.Book;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Map;
 
 public class PublicationDOMParser {
 
     private static final Logger LOGGER = LogManager.getLogger(PublicationSAXParser.class);
-    private Papers papers;
+    private final Papers catalog;
     private DocumentBuilder docBuilder;
 
     public PublicationDOMParser() {
-        this.papers = new Papers();
+        this.catalog = new Papers();
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         try {
             docBuilder = factory.newDocumentBuilder();
@@ -34,8 +36,8 @@ public class PublicationDOMParser {
         }
     }
 
-    public Papers getPapers() {
-        return papers;
+    public Papers getCatalog() {
+        return catalog;
     }
 
     public void buildCatalog(String fileName) {
@@ -47,19 +49,19 @@ public class PublicationDOMParser {
             for (int i = 0; i < publicationList.getLength(); i++) {
                 Element publication = (Element) publicationList.item(i);
                 AbstractPublication abstractPublication = buildNewspaper(publication);
-                papers.add(abstractPublication);
+                catalog.add(abstractPublication);
             }
             publicationList = root.getElementsByTagName("booklet");
             for (int i = 0; i < publicationList.getLength(); i++) {
                 Element publication = (Element) publicationList.item(i);
                 AbstractPublication abstractPublication = buildBooklet(publication);
-                papers.add(abstractPublication);
+                catalog.add(abstractPublication);
             }
             publicationList = root.getElementsByTagName("magazine");
             for (int i = 0; i < publicationList.getLength(); i++) {
                 Element publication = (Element) publicationList.item(i);
                 AbstractPublication abstractPublication = buildMagazine(publication);
-                papers.add(abstractPublication);
+                catalog.add(abstractPublication);
             }
         } catch (IOException e) {
             LOGGER.log(Level.ERROR, "File error or I/O error: " + e);
@@ -69,29 +71,34 @@ public class PublicationDOMParser {
     }
 
     private AbstractPublication buildMagazine(Element publication) {
-        return new Magazine.MagazineBuilder((Magazine)addPublicationElements(new Magazine(), publication))
+        Magazine magazine = new Magazine();
+        addPublicationElements(magazine, publication);
+        return new Magazine.MagazineBuilder(magazine)
                 .withSubscriptionIndex(Integer.parseInt(getElementTextContent(publication, XmlPublicationTags.SUBSCRIPTION_INDEX.getName())))
                 .build();
     }
 
     private AbstractPublication buildBooklet(Element publication) {
-        return addPublicationElements(new Booklet(), publication);
+        Booklet booklet = new Booklet();
+        addPublicationElements(booklet, publication);
+        return booklet;
     }
 
     private AbstractPublication buildNewspaper(Element publication) {
-        return new Newspaper.NewspaperBuilder((Newspaper)addPublicationElements(new Newspaper(), publication))
+        Newspaper newspaper = new Newspaper();
+        addPublicationElements(newspaper, publication);
+        return new Newspaper.NewspaperBuilder(newspaper)
                 .withSubscriptionIndex(Integer.parseInt(getElementTextContent(publication, XmlPublicationTags.SUBSCRIPTION_INDEX.getName())))
                 .build();
     }
 
-    private AbstractPublication addPublicationElements(AbstractPublication publication, Element element) {
+    private void addPublicationElements(AbstractPublication publication, Element element) {
         publication.setId(element.getAttribute(XmlPublicationTags.ID.getName()));
         publication.setPages(Integer.parseInt(getElementTextContent(element, XmlPublicationTags.PAGES.getName())));
         publication.setDate(LocalDateTime.parse(getElementTextContent(element, XmlPublicationTags.DATE.getName())));
         publication.setMonthly(Boolean.parseBoolean(getElementTextContent(element, XmlPublicationTags.MONTHLY.getName())));
         publication.setTitle(getElementTextContent(element, XmlPublicationTags.TITLE.getName()));
         publication.setGlossy(element.getAttribute(XmlPublicationTags.GLOSSY.getName()));
-        return publication;
     }
 
     private static String getElementTextContent(Element element, String elementName) {

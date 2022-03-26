@@ -12,21 +12,20 @@ import javax.xml.parsers.SAXParserFactory;
 import java.io.IOException;
 
 public class SAXBuilder extends AbstractBaseBuilder {
-    SAXParserFactory factory = SAXParserFactory.newInstance();
-    SAXParser parser = factory.newSAXParser();
-    XMLReader reader = parser.getXMLReader();
-    PublicationSAXParser publicationSAXParser = new PublicationSAXParser();
+
+    private final SAXParserFactory factory = SAXParserFactory.newInstance();
+    private final SAXParser parser = factory.newSAXParser();
+    private final XMLReader reader = parser.getXMLReader();
+    private final PublicationSAXParser publicationSAXParser = new PublicationSAXParser();
 
     public SAXBuilder() throws ParserConfigurationException, SAXException {
     }
 
     @Override
     public void buildCatalog(String path) throws IOException, SAXException {
-
         reader.setContentHandler(publicationSAXParser);
         reader.setErrorHandler(new PublicationErrorHandler());
         reader.parse(path);
-
         catalog = publicationSAXParser.getCatalog();
     }
 }

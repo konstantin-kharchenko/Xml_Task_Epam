@@ -21,8 +21,8 @@ import java.util.Objects;
 public class PublicationStAXParser {
 
     private static final Logger LOGGER = LogManager.getLogger(PublicationSAXParser.class);
-    private Papers catalog;
-    private XMLInputFactory inputFactory;
+    private final Papers catalog;
+    private final XMLInputFactory inputFactory;
 
     public PublicationStAXParser() {
         inputFactory = XMLInputFactory.newInstance();
@@ -75,97 +75,62 @@ public class PublicationStAXParser {
 
     private AbstractPublication buildMagazine(XMLStreamReader reader) throws XMLStreamException {
         Magazine magazine = new Magazine();
-        magazine.setId(reader.getAttributeValue(null, XmlPublicationTags.ID.getName()));
-        magazine.setGlossy(reader.getAttributeValue(null, XmlPublicationTags.GLOSSY.getName()));
-        String name;
-        while (reader.hasNext()) {
-            int type = reader.next();
-            switch (type) {
-                case XMLStreamConstants.START_ELEMENT:
-                    name = reader.getLocalName();
-                    publicationInit(magazine, reader, name);
-                    if (Objects.equals(name, XmlPublicationTags.SUBSCRIPTION_INDEX.getName())) {
-                        magazine.setSubscription_index(Integer.parseInt(getXMLText(reader)));
-                    }
-                    break;
-                case XMLStreamConstants.END_ELEMENT:
-                    name = reader.getLocalName();
-                    if (Objects.equals(name, XmlPublicationTags.MAGAZINE.getName())) {
-                        return magazine;
-                    }
-                    break;
-            }
-        }
-        return null;
+        publicationInitialization(magazine, reader);
+        return magazine;
     }
 
     private AbstractPublication buildBooklet(XMLStreamReader reader) throws XMLStreamException {
         Booklet booklet = new Booklet();
-        booklet.setId(reader.getAttributeValue(null, XmlPublicationTags.ID.getName()));
-        booklet.setGlossy(reader.getAttributeValue(null, XmlPublicationTags.GLOSSY.getName()));
-        String name;
-        while (reader.hasNext()) {
-            int type = reader.next();
-            switch (type) {
-                case XMLStreamConstants.START_ELEMENT:
-                    name = reader.getLocalName();
-                    publicationInit(booklet, reader, name);
-                    break;
-                case XMLStreamConstants.END_ELEMENT:
-                    name = reader.getLocalName();
-                    if (Objects.equals(name, XmlPublicationTags.BOOKLET.getName())) {
-                        return booklet;
-                    }
-                    break;
-            }
-        }
-        return null;
+        publicationInitialization(booklet, reader);
+        return booklet;
     }
 
     private AbstractPublication buildNewspaper(XMLStreamReader reader) throws XMLStreamException {
         Newspaper newspaper = new Newspaper();
-        newspaper.setId(reader.getAttributeValue(null, XmlPublicationTags.ID.getName()));
+        publicationInitialization(newspaper, reader);
+        return newspaper;
+    }
+
+
+    private void publicationInitialization(AbstractPublication publication, XMLStreamReader reader) throws XMLStreamException {
+
+        publication.setId(reader.getAttributeValue(null, XmlPublicationTags.ID.getName()));
+        publication.setGlossy(reader.getAttributeValue(null, XmlPublicationTags.GLOSSY.getName()));
         String name;
         while (reader.hasNext()) {
             int type = reader.next();
             switch (type) {
                 case XMLStreamConstants.START_ELEMENT:
                     name = reader.getLocalName();
-                    publicationInit(newspaper, reader, name);
-                    if (Objects.equals(name, XmlPublicationTags.SUBSCRIPTION_INDEX.getName())) {
-                        newspaper.setSubscription_index(Integer.parseInt(getXMLText(reader)));
+                    switch (Objects.requireNonNull(XmlPublicationTags.getXmlPublicationWord(name))) {
+                        case TITLE -> publication.setTitle(getXMLText(reader));
+                        case PAGES -> publication.setPages(Integer.parseInt(getXMLText(reader)));
+                        case DATE -> publication.setDate(LocalDateTime.parse(getXMLText(reader)));
+                        case COLOR -> publication.setColor(Boolean.parseBoolean(getXMLText(reader)));
+                        case MONTHLY -> publication.setMonthly(Boolean.parseBoolean(getXMLText(reader)));
                     }
-                    break;
-                case XMLStreamConstants.END_ELEMENT:
-                    name = reader.getLocalName();
-                    if (Objects.equals(name, XmlPublicationTags.NEWSPAPER.getName())) {
-                        return newspaper;
+                    if (Objects.equals(name, XmlPublicationTags.SUBSCRIPTION_INDEX.getName())) {
+                        if (publication instanceof Newspaper) {
+                            ((Newspaper) publication).setSubscription_index(Integer.parseInt(getXMLText(reader)));
+                        }
+                        if (publication instanceof Magazine) {
+                            ((Magazine) publication).setSubscription_index(Integer.parseInt(getXMLText(reader)));
+                        }
                     }
                     break;
             }
+            if (type == XMLStreamConstants.END_ELEMENT) {
+                name = reader.getLocalName();
+                if (Objects.equals(name, XmlPublicationTags.NEWSPAPER.getName())
+                        || Objects.equals(name, XmlPublicationTags.MAGAZINE.getName())
+                        || Objects.equals(name, XmlPublicationTags.BOOKLET.getName())) {
+                    int ao = 9;
+                    break;
+                }
+            }
         }
-        return null;
     }
 
-    private void publicationInit(AbstractPublication publication, XMLStreamReader reader, String name) throws XMLStreamException {
-        switch (Objects.requireNonNull(XmlPublicationTags.getXmlPublicationWord(name))) {
-            case TITLE:
-                publication.setTitle(getXMLText(reader));
-                break;
-            case PAGES:
-                publication.setPages(Integer.parseInt(getXMLText(reader)));
-                break;
-            case DATE:
-                publication.setDate(LocalDateTime.parse(getXMLText(reader)));
-                break;
-            case COLOR:
-                publication.setColor(Boolean.parseBoolean(getXMLText(reader)));
-                break;
-            case MONTHLY:
-                publication.setMonthly(Boolean.parseBoolean(getXMLText(reader)));
-                break;
-        }
-    }
 
     private String getXMLText(XMLStreamReader reader) throws XMLStreamException {
         String text = null;

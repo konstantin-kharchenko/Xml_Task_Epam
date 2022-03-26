@@ -9,6 +9,6 @@ public class DOMBuilder extends AbstractBaseBuilder {
     public void buildCatalog(String path) {
         PublicationDOMParser domBuilder = new PublicationDOMParser();
         domBuilder.buildCatalog(path);
-        catalog = domBuilder.getPapers();
+        catalog = domBuilder.getCatalog();
     }
 }

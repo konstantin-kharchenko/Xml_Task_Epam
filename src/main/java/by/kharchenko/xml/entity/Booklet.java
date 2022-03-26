@@ -1,8 +1,6 @@
 package by.kharchenko.xml.entity;
 
 
-import java.time.LocalDateTime;
-
 public class Booklet extends AbstractPublication {
 
     public Booklet() {
@@ -21,54 +19,10 @@ public class Booklet extends AbstractPublication {
                 '}';
     }
 
-    public static class BookletBuilder{
-        private Booklet booklet;
+    public static class BookletBuilder extends AbstractPublicationBuilder<Booklet>{
 
         public BookletBuilder() {
-            booklet = new Booklet();
-        }
-
-        public BookletBuilder(Booklet booklet) {
-            this.booklet = booklet;
-        }
-
-        public BookletBuilder withColor(boolean color){
-            booklet.color= color;
-            return this;
-        }
-
-        public BookletBuilder withMonthly(boolean monthly){
-            booklet.monthly= monthly;
-            return this;
-        }
-
-        public BookletBuilder withPages(int pages){
-            booklet.pages= pages;
-            return this;
-        }
-
-        public BookletBuilder withID(String id){
-            booklet.publicationId= id;
-            return this;
-        }
-
-        public BookletBuilder withDate(LocalDateTime date){
-            booklet.date= date;
-            return this;
-        }
-
-        public BookletBuilder withGlossy(String glossy){
-            booklet.glossy= glossy;
-            return this;
-        }
-
-        public BookletBuilder withTitle(String title){
-            booklet.title= title;
-            return this;
-        }
-
-        public Booklet build(){
-            return booklet;
+            this.publication = new Booklet();
         }
     }
 }
