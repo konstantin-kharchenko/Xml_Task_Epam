@@ -11,7 +11,7 @@ import java.util.List;
 
 public class ReferencePublication {
 
-    private static List<AbstractPublication> publicationList = new ArrayList<>();
+    private static final List<AbstractPublication> publicationList = new ArrayList<>();
 
     public static List<AbstractPublication> getPublicationList() {
         AbstractPublication publication = new Newspaper.NewspaperBuilder().withSubscriptionIndex(5).withColor(false).withMonthly(false).withTitle("Гродненская правда")

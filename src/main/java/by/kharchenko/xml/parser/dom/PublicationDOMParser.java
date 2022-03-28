@@ -15,10 +15,8 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import java.awt.print.Book;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Map;
 
 public class PublicationDOMParser {
 

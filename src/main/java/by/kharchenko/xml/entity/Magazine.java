@@ -1,6 +1,5 @@
 package by.kharchenko.xml.entity;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 

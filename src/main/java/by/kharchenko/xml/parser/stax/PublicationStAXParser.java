@@ -124,7 +124,6 @@ public class PublicationStAXParser {
                 if (Objects.equals(name, XmlPublicationTags.NEWSPAPER.getName())
                         || Objects.equals(name, XmlPublicationTags.MAGAZINE.getName())
                         || Objects.equals(name, XmlPublicationTags.BOOKLET.getName())) {
-                    int ao = 9;
                     break;
                 }
             }
