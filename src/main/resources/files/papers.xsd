@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:element name="publication" type="publication-type" abstract="true"/>
+
+    <xs:element name="newspaper" type="newspaperType" substitutionGroup="publication"/>
+
+    <xs:element name="magazine" type="magazineType" substitutionGroup="publication"/>
+
+    <xs:element name="booklet" type="bookletType" substitutionGroup="publication"/>
+
+
+    <xs:element name="papers">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="publication" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="publication-type">
+        <xs:sequence>
+            <xs:element name="title" type="xs:string" default="Белорусская литература"/>
+            <xs:element name="monthly" type="xs:boolean" default="false"/>
+            <xs:element name="color" type="xs:boolean" default="false"/>
+            <xs:element name="pages" type="xs:positiveInteger" default="100"/>
+            <xs:element name="date" type="xs:dateTime" default="2002-07-23T09:00:00"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="paperID" use="required"/>
+        <xs:attribute name="glossy" use="required">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="глянец на журнале"/>
+                    <xs:enumeration value="глянец на буклете"/>
+                    <xs:enumeration value="нет глянца(это газета)"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+
+    <xs:complexType name="newspaperType">
+        <xs:complexContent>
+            <xs:extension base="publication-type">
+                <xs:sequence>
+                    <xs:element name="subscription-index" type="xs:positiveInteger" default="1234567"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="magazineType">
+        <xs:complexContent>
+            <xs:extension base="publication-type">
+                <xs:sequence>
+                    <xs:element name="subscription-index" type="xs:positiveInteger" default="1234567"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="bookletType">
+        <xs:complexContent>
+            <xs:extension base="publication-type">
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:simpleType name="paperID">
+        <xs:restriction base="xs:ID">
+            <xs:pattern value="P\d{1,4}"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+</xs:schema>
